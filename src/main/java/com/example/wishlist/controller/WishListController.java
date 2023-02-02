@@ -1,8 +1,12 @@
 package com.example.wishlist.controller;
 
 import com.example.wishlist.client.ApiClient;
+import com.example.wishlist.client.SoapClient;
+import com.example.wishlist.customer.v3_1.AddWishlistItemsResponse;
+import com.example.wishlist.model.in.OrceToken;
 import com.example.wishlist.model.in.WishListDto;
 import com.example.wishlist.model.out.CustWishlist;
+import com.example.wishlist.model.out.CustWishlistTmp;
 import com.example.wishlist.model.out.WishListPK;
 import com.example.wishlist.service.CustWishlistRepository;
 import com.example.wishlist.service.CustomerWishlistService;
@@ -26,6 +30,8 @@ public class WishListController {
 
     private final ApiClient apiClient;
 
+    private final SoapClient soapClient;
+
     private final CustomerWishlistService customerWishlistService;
 
     private final CustWishlistRepository custWishlistRepository;
@@ -33,8 +39,12 @@ public class WishListController {
     @GetMapping(value = "/wishlist" , produces = MediaType.APPLICATION_JSON_VALUE)
     public WishListDto fetchAllWishList(){
 
-        Optional<CustWishlist> custWishlist = custWishlistRepository.findById(new WishListPK(2,"25"));
+        Optional<CustWishlistTmp> custWishlist = custWishlistRepository.findById(new WishListPK(169,"24"));
         WishListDto wishListDto = apiClient.getAllWishlist();
+        OrceToken token = apiClient.getOrceToken();
+        log.info("Token received is {}" , token.getAccess_token());
+        AddWishlistItemsResponse response = soapClient.addWishListItem(token.getAccess_token());
+        log.info("wish list response is {}" , response.getCustomerId());
         if(custWishlist.isPresent()){
             log.info(custWishlist.get().toString());
         }

@@ -14,8 +14,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class WishListPK implements Serializable {
 
-    @Column(name = "wishListId")
+    @Column(name = "\"wishListId\"")
     private int wishListId;
-    @Column(name = "customerId")
+    @Column(name = "\"customerId\"")
     private String customerId;
 }
